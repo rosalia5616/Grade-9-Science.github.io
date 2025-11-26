@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | MyScienceHub</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Poppins", Arial, sans-serif;
+      background: linear-gradient(135deg, #0078d7, #00c6ff);
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navbar */
+    nav {
+      background-color: #0a2965;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 24px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo { font-size: 22px; font-weight: bold; letter-spacing: 1px; }
+
+     nav a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+
+  nav a:hover {
+    background-color: #ff9800;  /* color when you touch/hover */
+    color: black;
+    border-radius: 5px;
+  }
+
+  nav a.active{
+    background-color: #ff9800;
+    color: black;
+    border-radius: 5px;
+  }
+
+    nav ul { list-style: none; display: flex; gap: 20px; }
+    nav ul li a { color: white; text-decoration: none; font-size: 16px; transition: color 0.3s ease; }
+    nav ul li a:hover { color: #00c6ff; }
+
+    /* Contact container */
+    .contact-container {
+      background: white;
+      max-width: 850px;
+      width: 90%;
+      margin: 50px auto;
+      padding: 40px 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.8s ease;
+    }
+    .contact-container h1 {
+      text-align: center;
+      color: #0078d7;
+      margin-bottom: 25px;
+    }
+
+
+    form { display: flex; flex-direction: column; gap: 20px; }
+    label { font-weight: 600; color: #333; }
+    input, textarea {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      width: 100%;
+      transition: border-color 0.3s;
+    }
+    input:focus, textarea:focus { border-color: #0078d7; outline: none; }
+    textarea { resize: vertical; min-height: 120px; }
+    button {
+      background-color: #0078d7;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      width: fit-content;
+      align-self: center;
+    }
+    button:hover { background-color: #005fa3; transform: scale(1.05); }
+
+    /* Info boxes */
+    .info-section {
+      margin-top: 35px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 20px;
+      color: #333;
+    }
+    .info-box {
+      flex: 1;
+      min-width: 260px;
+      background: #f8faff;
+      border-radius: 10px;
+      padding: 15px 20px;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .info-box h3 { color: #0078d7; margin-bottom: 8px; }
+    .info-box p { font-size: 15px; line-height: 1.6; }
+    .info-box a { color: #0078d7; text-decoration: none; }
+    .info-box a:hover { text-decoration: underline; }
+
+    /* Images beside Discord */
+    .follow-image{
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin-left: 8px;
+      vertical-align: middle;
+      border-radius: 6px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 250px;
+      border: none;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+
+    /* Popup alert */
+    .popup {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+    .popup.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .popup.success { border-left: 6px solid #00c853; color: #006400; }
+    .popup.error { border-left: 6px solid #ff3b30; color: #7a0000; }
+
+    footer {
+      background-color: #0a2965;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+      margin-top: auto;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      nav { flex-direction: column; align-items: flex-start; }
+      nav ul { flex-direction: column; gap: 10px; margin-top: 10px; }
+      .info-section { flex-direction: column; }
+      .popup { right: 10px; left: 10px; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">Grade-9 Science</div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lesson.html">Lessons</a></li>
+      <li><a href="video.html">Videos</a></li>
+      <li><a href="mutil.html">Exercises</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="contact-container">
+    <h1>Contact Us</h1>
+    <form id="contact-form">
+      <label for="name">Your Name</label>
+      <input type="text" id="name" name="user_name" placeholder="Your name" required>
+
+      <label for="email">Your Email</label>
+      <input type="email" id="email" name="user_email" placeholder="you@example.com" required>
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" placeholder="Write your message here..." required></textarea>
+
+      <button type="submit">Send Message</button>
+    </form>
+
+    <div class="info-section">
+      <div class="info-box">
+        <h3>📧 Email</h3>
+        <p><a href="mailto:nawkhukapaw.lin@gmail.com">nawkhukapaw.lin@gmail.com</a></p>
+        <p><a href="mailto:aphoomyat@gmail.com">aphoomyat@gmail.com</a></p>
+        <p><a href="mailto:juliaehna@gmail.com">juliaehna@gmail.com</a></p>
+      </div>
+
+      <div class="info-box">
+        <h3>📍 Location</h3>
+        <p>B.E.H.S(2), Hpa-an<br>Open: Mon–Fri (9:00 AM – 5:00 PM)</p>
+      </div>
+
+      <div class="info-box">
+        <h3>🌐 Follow Us</h3>
+        <p>
+          <a href="https://www.facebook.com/share/16eZTXQFAh/?mibextid=LQQJ4d">Facebook</a> •
+          <a href="https://discord.gg/Ct2uTaQG">Discord</a>•
+          <a href="https://t.me/+YOUR_TELEGRAM_LINK">Telegram</a> 
+          <img src="pictures/scan me.png" alt="scan" class="follow-image">
+          <span>Scan here</span>
+          
+        </p>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025-2026 Grade-9 Science | Built by Naw Khu Kapaw for learners❤️</p>
+  </footer>
+
+  <!-- Popup -->
+  <div id="popup" class="popup"></div>
+
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    (function() {
+      // Replace this with your actual EmailJS Public Key
+      emailjs.init("IJm1QCs0EFgcXonNQ");
+    })();
+
+    const form = document.getElementById('contact-form');
+    const popup = document.getElementById('popup');
+
+    function showPopup(message, type) {
+      popup.textContent = message;
+      popup.className = `popup show ${type}`;
+      setTimeout(() => popup.classList.remove('show'), 3500);
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      emailjs.sendForm('service_0xw6n1i', 'template_id6nxr3', this)
+        .then(() => {
+          showPopup("✅ Message Sent Successfully!", "success");
+          form.reset();
+        }, (error) => {
+          console.error("EmailJS Error:", error);
+          showPopup("❌ Failed to send message. Try again!", "error");
+        });
+    });
+  </script>
+</body>
+</html>

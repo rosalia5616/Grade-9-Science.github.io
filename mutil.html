@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz — Multiple Choice, True/False & Match</title>
+  <style>
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {
+      font-family:'Poppins', Arial, sans-serif;
+      background:linear-gradient(135deg,#0078d7,#00c6ff);
+      color:#333;
+      min-height:100vh;
+      display:flex;flex-direction:column;
+      overflow-x:hidden;
+    }
+
+    /* Navigation Bar */
+    nav {
+      background-color:#0a2965;color:white;
+      display:flex;justify-content:space-between;
+      align-items:center;padding:14px 24px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .logo {font-size:22px;font-weight:bold;letter-spacing:1px;}
+
+     nav a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+
+  nav a:hover {
+    background-color: #ff9800;  /* color when you touch/hover */
+    color: black;
+    border-radius: 5px;
+  }
+
+  nav a.active{
+    background-color: #ff9800;
+    color: black;
+    border-radius: 5px;
+  }
+
+
+    nav ul {list-style:none;display:flex;gap:20px;}
+    nav ul li a {color:white;text-decoration:none;font-size:16px;transition:color 0.3s ease;}
+    nav ul li a:hover {color:#00c6ff;}
+
+    /* Main Layout */
+    .container {width:100%;max-width:1000px;margin:auto;padding:30px;}
+    .quiz {
+      background:white;border-radius:15px;padding:20px;margin-top:30px;
+      box-shadow:0 4px 15px rgba(0,0,0,0.1);
+    }
+    h2 {color:#0a2965;margin-bottom:15px;}
+
+    .question {margin-bottom:20px;}
+    .question p {font-weight:600;margin-bottom:10px;}
+
+    .choices {display:flex;flex-direction:column;gap:10px;}
+    .choice {
+      background:#f0f4ff;padding:12px;border-radius:8px;
+      cursor:pointer;border:1px solid transparent;
+      transition:all 0.18s ease;
+      display:flex;align-items:center;gap:10px;
+      user-select:none;
+      outline: none;
+    }
+    .choice:hover {background:#e6f0ff;transform:translateY(-1px);}
+    .choice:focus {box-shadow:0 0 0 3px rgba(0,120,215,0.12);}
+    .choice.selected {border-color:#005fa3;background:#d7ebff;}
+
+    /* Colors for results */
+    .choice.correct {
+      background-color: #dff2e6;
+      border-color: #1aa34a;
+      color: #0b3d12;
+    }
+
+    .choice.incorrect {
+      background-color: #ffdede;
+      border-color: #c62828;
+      color: #4a0000;
+    }
+
+    .choice .marker {
+      min-width:24px;height:24px;border-radius:50%;
+      display:inline-flex;align-items:center;justify-content:center;
+      background:transparent;color:inherit;font-weight:700;
+      border:2px solid transparent;
+    }
+
+    .choice.selected .marker {border-color:#005fa3;background:#e6f4ff;color:#005fa3;}
+
+    .btn-row {margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+    button {
+      cursor:pointer;padding:10px 18px;border:none;border-radius:8px;
+      font-weight:bold;transition:all 0.18s ease;
+    }
+    .btn-primary {background:#0078d7;color:white;}
+    .btn-primary:hover {background:#005fa3;transform:translateY(-2px);}
+    .btn-secondary {background:white;color:#0078d7;border:2px solid #0078d7;}
+    .btn-secondary:hover {background:#eaf4ff;}
+
+    /* Result Styling */
+    #mc-result, #tf-result, #match-result {
+      margin-top:15px;
+      font-size:18px;
+      font-weight:bold;
+      text-align:center;
+      color:#0a2965;
+      transition:color 0.3s ease;
+    }
+    .result-list 
+    {margin-top:8px;
+      text-align:left;
+      max-height:260px;
+      overflow:auto;
+      padding:8px;
+      border-radius:8px;
+      background:#fafafa;
+      border:1px solid #eee;}
+    .result-item
+     {padding:6px 8px;
+      border-radius:6px;
+      margin-bottom:6px;}
+    .result-item.correct 
+    {background:#eff9f0;
+      border:1px solid #d6f0d9;
+      color:#0b3d12;}
+    .result-item.incorrect 
+    {background:#fff2f2;
+      border:1px solid #f2cfcf;
+      color:#4a0000;}
+
+    small.detail {display:block;margin-top:4px;font-size:13px;color:#444;}
+
+    footer {
+      background-color:#0a2965;color:white;
+      text-align:center;
+      padding:10px;
+      margin-top:auto;
+      font-size:14px;
+    }
+
+    /* Match-specific */
+    .match-grid 
+    {display:grid;
+      grid-template-columns:1fr;
+      gap:12px;}
+    .match-row 
+    {display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;}
+    .match-row select {
+      padding:8px;border-radius:
+      8px;
+      border:1px solid #ddd;
+      background:#fff;
+      min-width:160px;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width:900px){
+      .container {padding:16px;}
+      .choice {font-size:14px;padding:10px;}
+      .btn-row {gap:8px;}
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">Grade-9 Science</div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lesson.html">Lessons</a></li>
+      <li><a href="video.html">Videos</a></li>
+      <li><a href="mutil.html" class="active">Exercises</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <!-- Multiple Choice -->
+    <div id="mc" class="quiz" aria-labelledby="mc-title">
+      <h2 id="mc-title">Multiple Choice Quiz</h2>
+      <div id="mc-quiz" role="list"></div>
+      <div class="btn-row">
+        <button id="mc-submit" class="btn-primary" type="button">Submit</button>
+        <button id="mc-reset" class="btn-secondary" type="button">Reset</button>
+      </div>
+      <div id="mc-result" aria-live="polite"></div>
+    </div>
+
+    <!-- True/False -->
+    <div id="tf" class="quiz" aria-labelledby="tf-title">
+      <h2 id="tf-title">True or False Quiz</h2>
+      <div id="tf-quiz" role="list"></div>
+      <div class="btn-row">
+        <button id="tf-submit" class="btn-primary" type="button">Submit</button>
+        <button id="tf-reset" class="btn-secondary" type="button">Reset</button>
+      </div>
+      <div id="tf-result" aria-live="polite"></div>
+    </div>
+
+    <!-- Match the Answers -->
+    <section id="match" class="quiz" aria-labelledby="match-title">
+      <h2 id="match-title">Match the Answers</h2>
+      <div id="match-quiz"></div>
+      <div class="btn-row">
+        <button id="match-submit" class="btn-primary" type="button">Submit</button>
+        <button id="match-reset" class="btn-secondary" type="button">Reset</button>
+      </div>
+      <div id="match-result" aria-live="polite"></div>
+    </section>
+  </div>
+
+  <footer>
+    <p>© 2025-2026 Grade-9 Science | All Rights Reserved</p>
+  </footer>
+
+  <script>
+    /* ---------- DATA ---------- */
+    const mcQuestions = [
+      {id:1,q:'နျူကလိယနှင့် အနီးဆုံးအခွံမှာ?',choices:['K','L','M','N'],answer:0,detail:'နျူကလိယအနီးဆုံးအခွံကို K shell ဟုခေါ်သည်။'},
+      {id:2,q:'အောက်ဆီဂျင်အက်တမ်၏ အီလက်ထရွန်ဖွဲ့တည်ပုံမှာ?',choices:['(2.7)','(2.8.1)','(2.6)','(2.8.7)'],answer:2,detail:'Oxygen has 8 electrons distributed as 2 in K shell and 6 in L shell.'},
+      {id:3,q:'M အခွံ၏နံပါတ်မှာ?',choices:['1','2','3','4'],answer:2,detail:'M shell is the 3rd energy level.'},
+      {id:4,q:'နျူကလိယကို လည့်ပတ်သွားလာနိုင်သည့်အဓိကအခွံ(ပတ်လမ်း)များကို?',choices:['K,L,M,N','N,M,L,K','L,K,N,M','K,N,M,L'],answer:0,detail:'K,L,M,N စသည်ဖြင့် အမည်ပေးထားသည်။'},
+      {id:5,q:'ကလိုရင်း၏ အီလက်ထရွန် ဖွဲ့တည်ပုံမှာ?',choices:['(2.6)','(2.8.1)','(2.8.7)','(2.4)'],answer:2,detail:'ကလိုရင်း၏ အီလက်ထရွန်ဖွဲ့တည်ပုံမှာ(2.8.7)'}
+    ];
+
+    const tfQuestions = [
+      {id:1,q:'နျူကလိယနှင့် အနီးဆုံးအခွံမှာ K ဖြစ်သည်။',answer:true,detail:'Correct — K shell is the innermost.'},
+      {id:2,q:'L အခွံ၏ပတ်လမ်းနံပါတ်မှာ 1 ဖြစ်သည်။',answer:false,detail:'False — L shell is the second shell, with n=2.'},
+      {id:3,q:'M အခွံနံပါတ်မှာ 3 ဖြစ်သည်။',answer:true,detail:'Yes, M is the third shell.'},
+      {id:4,q:'နူကလိယနှင့်အနီးဆုံးအခွံ K Shell သည် စွမ်းအင်အနိမ့်ဆုံးဖြစ်သည်။',answer:true,detail:'Correct, it has the lowest energy.'},
+      {id:5,q:'အောက်ဆီဂျင်အက်တမ်၏ အီလက်ထရွန်ဖွဲ့တည်ပုံမှာ (2.8) ဖြစ်သည်။',answer:false,detail:'No, it’s (2.6) for oxygen.'}
+    ];
+
+    const matchQuestions = [
+      { id: 1, left: "K Shell", right: "Innermost shell" },
+      { id: 2, left: "L Shell", right: "2nd energy level" },
+      { id: 3, left: "M Shell", right: "3rd energy level" },
+      { id: 4, left: "Oxygen", right: "(2.6)" },
+      { id: 5, left: "Chlorine", right: "(2.8.7)" }
+    ];
+
+    /* ---------- STATE ---------- */
+    const userMCAnswers = {}; // qid -> index
+    const userTFAnswers = {}; // qid -> boolean
+    let userMatchAnswers = {}; // qid -> chosen right string
+
+    /* ---------- DOM UTILS ---------- */
+    function el(tag, attrs = {}, ...children) {
+      const e = document.createElement(tag);
+      for (const k in attrs) {
+        if (k === 'class') e.className = attrs[k];
+        else if (k === 'html') e.innerHTML = attrs[k];
+        else if (k.startsWith('on')) e.addEventListener(k.slice(2), attrs[k]);
+        else e.setAttribute(k, attrs[k]);
+      }
+      children.forEach(c => {
+        if (typeof c === 'string') e.appendChild(document.createTextNode(c));
+        else if (c) e.appendChild(c);
+      });
+      return e;
+    }
+
+    /* ---------- RENDER FUNCTIONS ---------- */
+    const mcContainer = document.getElementById('mc-quiz');
+    const tfContainer = document.getElementById('tf-quiz');
+    const matchContainer = document.getElementById('match-quiz');
+
+    function buildMC() {
+      mcContainer.innerHTML = '';
+      mcQuestions.forEach((q, qIdx) => {
+        const qbox = el('div',{class:'question', role:'listitem', 'aria-label': `Question ${qIdx+1}`});
+        qbox.appendChild(el('p',{}, `${qIdx+1}. ${q.q}`));
+        const choices = el('div',{class:'choices', role:'group', 'aria-label': `Choices for question ${qIdx+1}`});
+        q.choices.forEach((c, i) => {
+          const marker = el('span',{class:'marker', 'aria-hidden':'true'}, String.fromCharCode(65 + i)); // A, B, C...
+          const choice = el('div',{
+            class:'choice',
+            tabindex:0,
+            role:'button',
+            'data-qid': q.id,
+            'data-index': i
+          }, marker, el('span',{}, c));
+
+          const selectHandler = () => selectMC(q.id, i);
+          choice.addEventListener('click', selectHandler);
+          choice.addEventListener('keydown', (ev) => {
+            if (ev.key === 'Enter' || ev.key === ' ') {
+              ev.preventDefault();
+              selectHandler();
+            }
+          });
+          choices.appendChild(choice);
+        });
+        qbox.appendChild(choices);
+        mcContainer.appendChild(qbox);
+      });
+    }
+
+    function buildTF() {
+      tfContainer.innerHTML = '';
+      tfQuestions.forEach((q, qIdx) => {
+        const qbox = el('div',{class:'question', role:'listitem', 'aria-label': `TF Question ${qIdx+1}`});
+        qbox.appendChild(el('p',{}, `${qIdx+1}. ${q.q}`));
+        const choices = el('div',{class:'choices', role:'group', 'aria-label': `True or False for question ${qIdx+1}`});
+        ['True','False'].forEach((label, i) => {
+          const boolVal = i === 0;
+          const marker = el('span',{class:'marker', 'aria-hidden':'true'}, boolVal ? 'T' : 'F');
+          const choice = el('div',{
+            class:'choice',
+            tabindex:0,
+            role:'button',
+            'data-qid': q.id,
+            'data-bool': String(boolVal)
+          }, marker, el('span',{}, label));
+
+          const selectHandler = () => selectTF(q.id, boolVal);
+          choice.addEventListener('click', selectHandler);
+          choice.addEventListener('keydown', (ev) => {
+            if (ev.key === 'Enter' || ev.key === ' ') {
+              ev.preventDefault();
+              selectHandler();
+            }
+          });
+          choices.appendChild(choice);
+        });
+        qbox.appendChild(choices);
+        tfContainer.appendChild(qbox);
+      });
+    }
+
+    function buildMatch() {
+      matchContainer.innerHTML = '';
+      // build list of right-side options (keep stable order but you can shuffle if wanted)
+      const rightOptions = matchQuestions.map(q => q.right);
+
+      matchQuestions.forEach((q, index) => {
+        const row = el('div',{class:'question match-row', role:'listitem', 'aria-label': `Match item ${index+1}`});
+        const leftHtml = el('div',{}, `${index + 1}. ${q.left}`);
+        const select = el('select', {'data-id': q.id, class: 'match-select'});
+        select.appendChild(el('option', {value: ''}, '-- Choose --'));
+        rightOptions.forEach(op => {
+          select.appendChild(el('option', {value: op}, op));
+        });
+
+        select.addEventListener('change', (e) => {
+          const id = Number(e.target.getAttribute('data-id'));
+          const val = e.target.value;
+          if (val === '') delete userMatchAnswers[id];
+          else userMatchAnswers[id] = val;
+        });
+
+        row.appendChild(leftHtml);
+        row.appendChild(select);
+        matchContainer.appendChild(row);
+      });
+    }
+
+    /* ---------- SELECTION HANDLERS ---------- */
+    function selectMC(qid, idx) {
+      userMCAnswers[qid] = idx;
+      const qIndex = mcQuestions.findIndex(q => q.id === qid);
+      const box = mcContainer.children[qIndex];
+      const choices = box.querySelectorAll('.choice');
+      choices.forEach(ch => ch.classList.remove('selected','incorrect','correct'));
+      const chosen = choices[idx];
+      if (chosen) chosen.classList.add('selected');
+    }
+
+    function selectTF(qid, bool) {
+      userTFAnswers[qid] = bool;
+      const qIndex = tfQuestions.findIndex(q => q.id === qid);
+      const box = tfContainer.children[qIndex];
+      const choices = box.querySelectorAll('.choice');
+      choices.forEach(ch => ch.classList.remove('selected','incorrect','correct'));
+      const chosenIndex = bool ? 0 : 1;
+      const chosen = choices[chosenIndex];
+      if (chosen) chosen.classList.add('selected');
+    }
+
+    /* ---------- SUBMIT / RESET HANDLERS ---------- */
+    document.getElementById('mc-submit').addEventListener('click', () => {
+      let correct = 0;
+      const list = [];
+      mcQuestions.forEach((q, i) => {
+        const box = mcContainer.children[i];
+        const choices = box.querySelectorAll('.choice');
+        choices.forEach(ch => ch.classList.remove('correct','incorrect'));
+        const correctChoice = choices[q.answer];
+        if (correctChoice) correctChoice.classList.add('correct');
+
+        const userChoiceIndex = userMCAnswers[q.id];
+        if (userChoiceIndex === undefined) {
+          list.push({ ok:false, q:q.q, detail:`No answer chosen — ${q.detail}` });
+        } else if (userChoiceIndex === q.answer) {
+          correct++;
+          list.push({ ok:true, q:q.q, detail:q.detail });
+        } else {
+          const userChoice = choices[userChoiceIndex];
+          if (userChoice) userChoice.classList.add('incorrect');
+          list.push({ ok:false, q:q.q, detail:q.detail });
+        }
+      });
+
+      const resultDiv = document.getElementById('mc-result');
+      resultDiv.innerHTML = `<div>${correct}/${mcQuestions.length} Correct</div>`;
+      const resultList = el('div',{class:'result-list', 'aria-live':'polite'});
+      list.forEach(item => {
+        const cls = item.ok ? 'result-item correct' : 'result-item incorrect';
+        const node = el('div',{class:cls}, item.ok ? '✅ ' : '❌ ', el('strong',{}, item.q),
+          el('div',{class:'detail'}, item.detail));
+        resultList.appendChild(node);
+      });
+      resultDiv.appendChild(resultList);
+    });
+
+    document.getElementById('mc-reset').addEventListener('click', () => {
+      for (const k in userMCAnswers) delete userMCAnswers[k];
+      Array.from(mcContainer.children).forEach((box) => {
+        box.querySelectorAll('.choice').forEach(ch => ch.classList.remove('selected','correct','incorrect'));
+      });
+      document.getElementById('mc-result').innerHTML = '';
+    });
+
+    document.getElementById('tf-submit').addEventListener('click', () => {
+      let correct = 0;
+      const list = [];
+      tfQuestions.forEach((q, i) => {
+        const box = tfContainer.children[i];
+        const choices = box.querySelectorAll('.choice');
+        choices.forEach(ch => ch.classList.remove('correct','incorrect'));
+        const correctIndex = q.answer ? 0 : 1;
+        if (choices[correctIndex]) choices[correctIndex].classList.add('correct');
+
+        if (userTFAnswers[q.id] === undefined) {
+          list.push({ ok:false, q:q.q, detail:`No answer chosen — ${q.detail}` });
+        } else if (userTFAnswers[q.id] === q.answer) {
+          correct++;
+          list.push({ ok:true, q:q.q, detail:q.detail });
+        } else {
+          const chosenIndex = userTFAnswers[q.id] ? 0 : 1;
+          if (choices[chosenIndex]) choices[chosenIndex].classList.add('incorrect');
+          list.push({ ok:false, q:q.q, detail:q.detail });
+        }
+      });
+
+      const resultDiv = document.getElementById('tf-result');
+      resultDiv.innerHTML = `<div>${correct}/${tfQuestions.length} Correct</div>`;
+      const resultList = el('div',{class:'result-list', 'aria-live':'polite'});
+      list.forEach(item => {
+        const cls = item.ok ? 'result-item correct' : 'result-item incorrect';
+        const node = el('div',{class:cls}, item.ok ? '✅ ' : '❌ ', el('strong',{}, item.q),
+          el('div',{class:'detail'}, item.detail));
+        resultList.appendChild(node);
+      });
+      resultDiv.appendChild(resultList);
+    });
+
+    document.getElementById('tf-reset').addEventListener('click', () => {
+      for (const k in userTFAnswers) delete userTFAnswers[k];
+      Array.from(tfContainer.children).forEach((box) => {
+        box.querySelectorAll('.choice').forEach(ch => ch.classList.remove('selected','correct','incorrect'));
+      });
+      document.getElementById('tf-result').innerHTML = '';
+    });
+
+    document.getElementById('match-submit').addEventListener('click', () => {
+      let correct = 0;
+      const resultItems = [];
+      matchQuestions.forEach(q => {
+        const chosen = userMatchAnswers[q.id];
+        if (chosen === q.right) {
+          correct++;
+          resultItems.push({ok:true, left:q.left, chosen:chosen, right:q.right});
+        } else if (!chosen) {
+          resultItems.push({ok:false, left:q.left, chosen:'No answer', right:q.right});
+        } else {
+          resultItems.push({ok:false, left:q.left, chosen:chosen, right:q.right});
+        }
+      });
+
+      const resultDiv = document.getElementById('match-result');
+      resultDiv.innerHTML = `<div>${correct}/${matchQuestions.length} Correct</div>`;
+      const listDiv = el('div',{class:'result-list'});
+      resultItems.forEach(item => {
+        const node = el('div',{class:item.ok ? 'result-item correct' : 'result-item incorrect'},
+          item.ok ? '✅ ' : '❌ ',
+          el('strong',{}, `${item.left}`),
+          el('div',{class:'detail'}, `Your answer: ${item.chosen}`),
+          (!item.ok ? el('div',{class:'detail'}, `Correct: ${item.right}`) : '')
+        );
+        listDiv.appendChild(node);
+      });
+      resultDiv.appendChild(listDiv);
+    });
+
+    document.getElementById('match-reset').addEventListener('click', () => {
+      userMatchAnswers = {};
+      document.querySelectorAll('.match-select').forEach(sel => sel.value = '');
+      document.getElementById('match-result').innerHTML = '';
+    });
+
+    /* ---------- INITIALIZE ---------- */
+    buildMC();
+    buildTF();
+    buildMatch();
+  </script>
+</body>
+</html>

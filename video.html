@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lessons | My Website</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+            font-family: "Poppins", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #1096c2;
+            color: #212322;
+    }
+
+.logo {
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+
+    /* Navbar */
+    nav {
+      background-color: #0a2965;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 24px;
+    }
+
+     nav a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+
+  nav a:hover {
+    background-color: #ff9800;  /* color when you touch/hover */
+    color: black;
+    border-radius: 5px;
+  }
+
+  nav a.active{
+    background-color: #ff9800;
+    color: black;
+    border-radius: 5px;
+  }
+
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      color: #00bfff;
+    }
+
+    /* Lessons Section */
+    .lessons {
+      max-width: 1000px;
+      margin: 60px auto;
+      padding: 20px;
+    }
+
+    .lessons h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #222;
+    }
+
+    .lesson-card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .lesson-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .lesson-card h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+    }
+
+  * {
+            box-sizing: border-box;
+        }
+      
+        h1{
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.2em;
+    }
+    h1 {
+      margin-bottom: 40px;
+      font-size: 2em;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+
+      .container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .player {
+      background: rgba(141, 234, 217, 0.829);
+      border-radius: 20px;
+      padding: 20px;
+      width: 350px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+    }
+
+    video {
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    input[type="range"] {
+      width: 80%;
+      margin-top: 10px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-size: 0.9em;
+    }
+    /* Footer */
+    footer {
+      background-color: #0a2965;
+      color: white;
+      text-align: center;
+      padding: 12px 0;
+      margin-top: 40px;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      nav ul {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      .lessons {
+        padding: 10px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+<!--Navigation-->
+  <nav>
+    <div class="logo">Grade-9 Science</div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lesson.html">Lessons</a></li>
+      <li><a href="video.html" class="active">Videos</a></li>
+      <li><a href="mutil.html">Exercises</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+<h1>🎥Learn with video 🎬</h1>
+<div class="container">
+    <!--Video Player-->
+    <div class="player">
+      <h2>Part-1</h2>
+      <video id="video" src="video/video1 (1).mp4" controls></video>
+    </div>
+
+    <!-- Video Player -->
+    
+    <div class="player">
+      <h2>Part-2</h2>
+      <video id="video" src="video/video1 (2).mp4" controls></video>
+    </div>
+
+ <div class="player">
+      <h2>Part-3</h2>
+      <video id="video" src="video/video1(3).mp4" controls></video>
+    </div>
+
+     <div class="player">
+      <h2>Part-4</h2>
+      <video id="video" src="video/video1(4).mp4" controls></video>
+    </div>
+
+    <div class="player">
+      <h2>Part-5</h2>
+      <video id="video" src="video/video1(5).mp4" controls></video>
+    </div>
+
+    <div class="player">
+      <h2>Part-6</h2>
+      <video id="video" src="video/video1(6).mp4" controls></video>
+    </div>
+    </div>
+
+  <script>
+
+    const audio = document.getElementById("audio");
+
+    function playAudio() {
+      audio.play();
+    }
+
+    function pauseAudio() {
+      audio.pause();
+    }
+
+    function stopAudio() {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+
+    function setVolume(value) {
+      audio.volume = value;
+    }
+  </script>
+  </section>
+
+  <footer>
+    <p>© 2025-2026 Grade-9 Science | All Rights Reserved</p>
+  </footer>
+  </style>
+</head>
+
+</body>
+</html>
